@@ -1,11 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
+import EmotionChart from './EmotionChart';
+
+interface EmotionHistory {
+  timestamp: string;
+  emotions: {
+    [key: string]: number;
+  };
+}
 
 const EmotionDetector: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isModelLoading, setIsModelLoading] = useState(true);
   const [error, setError] = useState<string>('');
+  const [emotionHistory, setEmotionHistory] = useState<EmotionHistory[]>([]);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -58,6 +67,26 @@ const EmotionDetector: React.FC = () => {
         context.clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawDetections(canvas, detections);
         faceapi.draw.drawFaceExpressions(canvas, detections);
+
+        // Save emotion data if face is detected
+        if (detections.length > 0) {
+          const emotions = detections[0].expressions;
+          setEmotionHistory(prev => {
+            const newHistory = [...prev, {
+              timestamp: new Date().toISOString(),
+              emotions: {
+                rõõm: emotions.happy * 100,
+                kurbus: emotions.sad * 100,
+                viha: emotions.angry * 100,
+                hirm: emotions.fearful * 100,
+                üllatus: emotions.surprised * 100,
+                vastikus: emotions.disgusted * 100
+              }
+            }];
+            // Keep last 50 measurements
+            return newHistory.slice(-50);
+          });
+        }
       }
 
       requestAnimationFrame(detectEmotions);
@@ -83,11 +112,14 @@ const EmotionDetector: React.FC = () => {
           style={{
             position: 'absolute',
             top: 50,
-            left: 150,
+            left: 350,
             width: '100%',
             maxWidth: '600px'
           }}
         />
+      </div>
+      <div className="chart-container" style={{ marginTop: '20px', width: '100%', maxWidth: '800px', margin: '20px auto' }}>
+        {emotionHistory.length > 0 && <EmotionChart data={emotionHistory} />}
       </div>
     </div>
   );
