@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import EmotionChart from './EmotionChart';
+import { CameraIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid';
 
 interface EmotionHistory {
   timestamp: string;
@@ -52,8 +53,12 @@ const EmotionDetector: React.FC = () => {
     const canvas = canvasRef.current;
     const video = videoRef.current;
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Set fixed dimensions for better control
+    const videoWidth = 640;
+    const videoHeight = 480;
+    
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
 
     const detectEmotions = async () => {
       if (isModelLoading) return;
@@ -75,6 +80,7 @@ const EmotionDetector: React.FC = () => {
             const newHistory = [...prev, {
               timestamp: new Date().toISOString(),
               emotions: {
+                neutraalne: emotions.neutral * 100,
                 rõõm: emotions.happy * 100,
                 kurbus: emotions.sad * 100,
                 viha: emotions.angry * 100,
@@ -83,7 +89,6 @@ const EmotionDetector: React.FC = () => {
                 vastikus: emotions.disgusted * 100
               }
             }];
-            // Keep last 50 measurements
             return newHistory.slice(-50);
           });
         }
@@ -96,30 +101,48 @@ const EmotionDetector: React.FC = () => {
   };
 
   return (
-    <div className="emotion-detector">
-      {isModelLoading && <div>Mudelite laadimine...</div>}
-      {error && <div className="error">{error}</div>}
-      <div className="video-container">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          onPlay={handleVideoPlay}
-          style={{ width: '100%', maxWidth: '600px' }}
-        />
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: 'absolute',
-            top: 50,
-            left: 350,
-            width: '100%',
-            maxWidth: '600px'
-          }}
-        />
-      </div>
-      <div className="chart-container" style={{ marginTop: '20px', width: '100%', maxWidth: '800px', margin: '20px auto' }}>
-        {emotionHistory.length > 0 && <EmotionChart data={emotionHistory} />}
+    <div className="emotion-detector space-y-8">
+      {isModelLoading && (
+        <div className="flex items-center justify-center p-6 bg-blue-50 rounded-lg">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mr-3"></div>
+          <p className="text-indigo-600 font-medium">Mudelite laadimine...</p>
+        </div>
+      )}
+      
+      {error && (
+        <div className="flex items-center p-4 bg-red-50 rounded-lg">
+          <ExclamationTriangleIcon className="h-6 w-6 text-red-500 mr-3" />
+          <p className="text-red-700">{error}</p>
+        </div>
+      )}
+
+      <div className="flex flex-col lg:flex-row gap-8">
+        <div className="lg:w-1/3">
+          <div className="relative rounded-2xl overflow-hidden bg-gray-900 shadow-xl">
+            <div className="relative" style={{ paddingTop: '75%' }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                onPlay={handleVideoPlay}
+                className="absolute top-0 left-0 w-full h-full object-contain"
+              />
+              <canvas
+                ref={canvasRef}
+                className="absolute top-0 left-0 w-full h-full"
+              />
+            </div>
+            
+            <div className="absolute bottom-4 left-4 flex items-center bg-black/50 rounded-full px-4 py-2">
+              <CameraIcon className="h-5 w-5 text-white mr-2" />
+              <span className="text-white text-sm font-medium">Reaalajas analüüs</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:w-2/3">
+          {emotionHistory.length > 0 && <EmotionChart data={emotionHistory} />}
+        </div>
       </div>
     </div>
   );
