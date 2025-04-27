@@ -103,6 +103,7 @@ const EmotionChart: React.FC<EmotionChartProps> = ({ data }) => {
           padding: 8
         }
       }
+      
     },
     maintainAspectRatio: false
   });
