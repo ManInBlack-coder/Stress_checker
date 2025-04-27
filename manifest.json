@@ -1,0 +1,25 @@
+{
+  "short_name": "Stress Checker",
+  "name": "Stress Checker App",
+  "icons": [
+    {
+      "src": "/Stress_checker/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/Stress_checker/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/Stress_checker/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/Stress_checker/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
