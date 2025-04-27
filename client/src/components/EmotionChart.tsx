@@ -8,8 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  Scale,
-  ScriptableContext
+  
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
