@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Stress_checker/static/css/main.52a3c92c.css",
-    "main.js": "/Stress_checker/static/js/main.57339064.js",
+    "main.js": "/Stress_checker/static/js/main.8456223e.js",
     "static/js/453.33661a76.chunk.js": "/Stress_checker/static/js/453.33661a76.chunk.js",
     "index.html": "/Stress_checker/index.html",
     "main.52a3c92c.css.map": "/Stress_checker/static/css/main.52a3c92c.css.map",
-    "main.57339064.js.map": "/Stress_checker/static/js/main.57339064.js.map",
+    "main.8456223e.js.map": "/Stress_checker/static/js/main.8456223e.js.map",
     "453.33661a76.chunk.js.map": "/Stress_checker/static/js/453.33661a76.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.52a3c92c.css",
-    "static/js/main.57339064.js"
+    "static/js/main.8456223e.js"
   ]
 }
