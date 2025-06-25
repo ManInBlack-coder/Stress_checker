@@ -20,16 +20,22 @@ const EmotionDetector: React.FC = () => {
   useEffect(() => {
     const loadModels = async () => {
       try {
+        console.log('Alustame mudelite laadimist...');
         const MODEL_URL = '/Stress_checker/models';
+        console.log('Mudelite URL:', MODEL_URL);
+        
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
           faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         ]);
+        
+        console.log('Mudelid laaditud edukalt!');
         setIsModelLoading(false);
         startVideo();
       } catch (err) {
-        setError('Mudelite laadimine ebaõnnestus');
-        console.error('Error loading models:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Tundmatu viga';
+        console.error('Viga mudelite laadimisel:', err);
+        setError(`Mudelite laadimine ebaõnnestus: ${errorMessage}`);
       }
     };
 
